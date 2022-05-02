@@ -1,1 +1,0 @@
-web: gunicorn streetlightdashboard.wsgi --log-file -
