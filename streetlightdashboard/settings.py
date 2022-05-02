@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -87,7 +88,7 @@ DATABASES = {
         'Name': 'streetlightDB',
         'ENFORCE_SCHEMA': False,
         'CLIENT': {
-            'host': 'Your MONGO Connection URL',
+            'host': 'mongodb+srv://admin:admin@cluster0.d5sdy.mongodb.net/streetlightDB?retryWrites=true&w=majority',
         }
     }
 }
