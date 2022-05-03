@@ -15,4 +15,4 @@ class StreetLight(models.Model):
     LON=models.CharField(max_length=255,null=False)
     DRY_BIN=models.CharField(max_length=255,null=False)
     WET_BIN=models.CharField(max_length=255,null=False)
-    TIME_STAMP = models.DateTimeField(auto_now_add=True,null=False)
+    TIME_STAMP = models.DateTimeField(auto_now=True,null=False)
