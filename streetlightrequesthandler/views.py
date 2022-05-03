@@ -17,10 +17,13 @@ def store_data_from_streetlight(request):
 
 def get_all_data(request):
     if request.method=='GET':
+        payload=request.GET
+        no_of_results_per_page=int(payload.get('no_of_results_per_page'))
+        page_no=int(payload.get('page_no'))
         streetlights=[]
-        for streetlight in StreetLight.objects.all():
+        for streetlight in StreetLight.objects.all()[(page_no-1)*no_of_results_per_page:((page_no-1)*no_of_results_per_page)+no_of_results_per_page]:
             streetlights.append({"id":streetlight.id,"ID":streetlight.ID, "BV":streetlight.BV,"BI":streetlight.BI,"SV":streetlight.SV,"SI":streetlight.SI,"LV":streetlight.LV,"LI":streetlight.LI,"BA":streetlight.BA,"STATE":streetlight.STATE,"LAT":streetlight.LAT,"LON":streetlight.LON,"DRY_BIN":streetlight.DRY_BIN,"WET_BIN":streetlight.WET_BIN,"TIME_STAMP":str(streetlight.TIME_STAMP)})
-        responses=json.dumps([{'Streetlights':streetlights}])
+        responses=json.dumps([{'Streetlights':streetlights,'no_of_results_per_page':no_of_results_per_page,'page_no':page_no}])
     else:
         responses=json.dumps([{'Error':'Only Get Request Allowed'}])   
 
