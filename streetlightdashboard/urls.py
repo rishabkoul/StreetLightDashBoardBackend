@@ -16,11 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from streetlightrequesthandler.views import store_data_from_streetlight, get_all_data, get_no_of_records
+from streetlightrequesthandler.views import store_data_from_streetlight, get_all_data, get_no_of_records,get_all_states
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/store',store_data_from_streetlight,name='store'),
     path('api/get_all',get_all_data,name='get_all'),
-    path('api/get_no_of_records',get_no_of_records, name="get_no_of_records")
+    path('api/get_no_of_records',get_no_of_records, name="get_no_of_records"),
+    path('api/get_all_states',get_all_states,name='get_all_states')
 ]

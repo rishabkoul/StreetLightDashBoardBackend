@@ -25,12 +25,12 @@ def store_data_from_streetlight(request):
         except:
             streetlightrecord = StreetLight(ID=payload.get('ID'), BV=payload.get('BV'),BI=payload.get('BI'),SV=payload.get('SV'),SI=payload.get('SI'),LV=payload.get('LV'),LI=payload.get('LI'),BA=payload.get('BA'),STATE=payload.get('STATE'),LAT=payload.get('LAT'),LON=payload.get('LON'),DRY_BIN=payload.get('DRY_BIN'),WET_BIN=payload.get('WET_BIN'))
             streetlightrecord.save()
-        responses=json.dumps([{'Message' : 'Success'}])
+        responses='SUCCESS'
     else:
         responses=json.dumps([{'Error':'Only Get Request Allowed'}])   
 
     
-    return HttpResponse(responses,content_type='text/json')
+    return HttpResponse(responses)
 
 def get_all_data(request):
     if request.method=='GET':
@@ -52,6 +52,16 @@ def get_no_of_records(request):
     if request.method=='GET':
         total_results=StreetLight.objects.all().count()
         responses=json.dumps([{'total_results':total_results}])
+    else:
+        responses=json.dumps([{'Error':'Only Get Request Allowed'}])   
+
+    
+    return HttpResponse(responses,content_type='text/json')
+
+def get_all_states(request):
+    if request.method=='GET':
+        states=list(StreetLight.objects.all().values_list('STATE', flat=True))
+        responses=json.dumps([{'states':states}])
     else:
         responses=json.dumps([{'Error':'Only Get Request Allowed'}])   
 
