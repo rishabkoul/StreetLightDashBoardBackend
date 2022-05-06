@@ -1,4 +1,5 @@
 import json
+from django.db.models import Q
 from django.http.response import HttpResponse
 from streetlightrequesthandler.models import StreetLight
 import math
@@ -37,9 +38,10 @@ def get_all_data(request):
         payload=request.GET
         no_of_results_per_page=int(payload.get('no_of_results_per_page'))
         page_no=int(payload.get('page_no'))
-        total_results=StreetLight.objects.all().count()
+        query=payload.get('query')
+        total_results=StreetLight.objects.filter(Q(ID__icontains=query) | Q(STATE__icontains=query) | Q(LAT__icontains=query)| Q(LON__icontains=query) | Q(DRY_BIN__icontains=query) | Q(WET_BIN__icontains=query) ).count()
         streetlights=[]
-        for streetlight in StreetLight.objects.all()[(page_no-1)*no_of_results_per_page:((page_no-1)*no_of_results_per_page)+no_of_results_per_page]:
+        for streetlight in StreetLight.objects.filter(Q(ID__icontains=query) | Q(STATE__icontains=query) | Q(LAT__icontains=query)| Q(LON__icontains=query) | Q(DRY_BIN__icontains=query) | Q(WET_BIN__icontains=query) )[(page_no-1)*no_of_results_per_page:((page_no-1)*no_of_results_per_page)+no_of_results_per_page]:
             streetlights.append({"id":streetlight.id,"ID":streetlight.ID, "BV":streetlight.BV,"BI":streetlight.BI,"SV":streetlight.SV,"SI":streetlight.SI,"LV":streetlight.LV,"LI":streetlight.LI,"BA":streetlight.BA,"STATE":streetlight.STATE,"LAT":streetlight.LAT,"LON":streetlight.LON,"DRY_BIN":streetlight.DRY_BIN,"WET_BIN":streetlight.WET_BIN,"TIME_STAMP":str(streetlight.TIME_STAMP)})
         responses=json.dumps([{'Streetlights':streetlights,'no_of_results_per_page':no_of_results_per_page,'page_no':page_no,'total_results':total_results,'no_of_pages':math.ceil(total_results/no_of_results_per_page)}])
     else:
