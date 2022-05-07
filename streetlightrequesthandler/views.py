@@ -69,3 +69,13 @@ def get_all_states(request):
 
     
     return HttpResponse(responses,content_type='text/json')
+
+def get_all_states_with_lon_lat(request):
+    if request.method=='GET':
+        states_with_lon_lat=list(StreetLight.objects.all().values_list('LON', 'LAT','STATE'))
+        responses=json.dumps([{'states_with_lon_lat':states_with_lon_lat}])
+    else:
+        responses=json.dumps([{'Error':'Only Get Request Allowed'}])   
+
+    
+    return HttpResponse(responses,content_type='text/json')
