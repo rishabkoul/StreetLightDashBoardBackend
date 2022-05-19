@@ -10,7 +10,7 @@ def store_data_from_streetlight(request):
         payload=request.GET
         try:
             streetlightrecord = StreetLight.objects.get(ID=payload.get('ID'))
-            streetlightrecordhistory=StreetLightHistory(ID=payload.get('ID'), BV=streetlightrecord.BV,BI=streetlightrecord.BI,SV=streetlightrecord.SV,SI=streetlightrecord.SI,LV=streetlightrecord.LV,LI=streetlightrecord.LI,BA=streetlightrecord.BA,STATE=streetlightrecord.STATE,LAT=streetlightrecord.LAT,LON=streetlightrecord.LON,DRY_BIN=streetlightrecord.DRY_BIN,WET_BIN=streetlightrecord.WET_BIN,DATE=streetlightrecord.DATE,TIME_STAMP=streetlightrecord.TIME_STAMP)
+            streetlightrecordhistory=StreetLightHistory(id=streetlightrecord.id,ID=payload.get('ID'), BV=streetlightrecord.BV,BI=streetlightrecord.BI,SV=streetlightrecord.SV,SI=streetlightrecord.SI,LV=streetlightrecord.LV,LI=streetlightrecord.LI,BA=streetlightrecord.BA,STATE=streetlightrecord.STATE,LAT=streetlightrecord.LAT,LON=streetlightrecord.LON,DRY_BIN=streetlightrecord.DRY_BIN,WET_BIN=streetlightrecord.WET_BIN,DATE=streetlightrecord.DATE,TIME_STAMP=streetlightrecord.TIME_STAMP)
             streetlightrecordhistory.save()
             streetlightrecord.BV = payload.get('BV')
             streetlightrecord.BI = payload.get('BI')
