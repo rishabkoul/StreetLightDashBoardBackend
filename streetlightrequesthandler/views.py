@@ -10,7 +10,7 @@ def store_data_from_streetlight(request):
         payload=request.GET
         try:
             streetlightrecord = StreetLight.objects.get(ID=payload.get('ID'))
-            streetlightrecordhistory=StreetLightHistory(id=streetlightrecord.id,ID=payload.get('ID'), BV=streetlightrecord.BV,BI=streetlightrecord.BI,SV=streetlightrecord.SV,SI=streetlightrecord.SI,LV=streetlightrecord.LV,LI=streetlightrecord.LI,BA=streetlightrecord.BA,STATE=streetlightrecord.STATE,LAT=streetlightrecord.LAT,LON=streetlightrecord.LON,DRY_BIN=streetlightrecord.DRY_BIN,WET_BIN=streetlightrecord.WET_BIN,DATE=streetlightrecord.DATE,TIME_STAMP=streetlightrecord.TIME_STAMP)
+            streetlightrecordhistory=StreetLightHistory(ID=payload.get('ID'), BV=streetlightrecord.BV,BI=streetlightrecord.BI,SV=streetlightrecord.SV,SI=streetlightrecord.SI,LV=streetlightrecord.LV,LI=streetlightrecord.LI,BA=streetlightrecord.BA,STATE=streetlightrecord.STATE,LAT=streetlightrecord.LAT,LON=streetlightrecord.LON,DRY_BIN=streetlightrecord.DRY_BIN,WET_BIN=streetlightrecord.WET_BIN,DATE=streetlightrecord.DATE,TIME_STAMP=streetlightrecord.TIME_STAMP)
             streetlightrecordhistory.save()
             streetlightrecord.BV = payload.get('BV')
             streetlightrecord.BI = payload.get('BI')
@@ -45,7 +45,7 @@ def get_all_data(request):
         total_results=results.count()
         streetlights=[]
         for streetlight in results[(page_no-1)*no_of_results_per_page:((page_no-1)*no_of_results_per_page)+no_of_results_per_page]:
-            streetlights.append({"id":streetlight.id,"ID":streetlight.ID, "BV":streetlight.BV,"BI":streetlight.BI,"SV":streetlight.SV,"SI":streetlight.SI,"LV":streetlight.LV,"LI":streetlight.LI,"BA":streetlight.BA,"STATE":streetlight.STATE,"LAT":streetlight.LAT,"LON":streetlight.LON,"DRY_BIN":streetlight.DRY_BIN,"WET_BIN":streetlight.WET_BIN,"DATE":str(streetlight.DATE),"TIME_STAMP":str(streetlight.TIME_STAMP)})
+            streetlights.append({"ID":streetlight.ID, "BV":streetlight.BV,"BI":streetlight.BI,"SV":streetlight.SV,"SI":streetlight.SI,"LV":streetlight.LV,"LI":streetlight.LI,"BA":streetlight.BA,"STATE":streetlight.STATE,"LAT":streetlight.LAT,"LON":streetlight.LON,"DRY_BIN":streetlight.DRY_BIN,"WET_BIN":streetlight.WET_BIN,"DATE":str(streetlight.DATE),"TIME_STAMP":str(streetlight.TIME_STAMP)})
         responses=json.dumps([{'Streetlights':streetlights,'no_of_results_per_page':no_of_results_per_page,'page_no':page_no,'total_results':total_results,'no_of_pages':math.ceil(total_results/no_of_results_per_page)}])
     else:
         responses=json.dumps([{'Error':'Only Get Request Allowed'}])   
@@ -66,7 +66,7 @@ def get_all_historical_data(request):
         total_results=results.count()
         streetlights=[]
         for streetlight in results[(page_no-1)*no_of_results_per_page:((page_no-1)*no_of_results_per_page)+no_of_results_per_page]:
-            streetlights.append({"id":streetlight.id,"ID":streetlight.ID, "BV":streetlight.BV,"BI":streetlight.BI,"SV":streetlight.SV,"SI":streetlight.SI,"LV":streetlight.LV,"LI":streetlight.LI,"BA":streetlight.BA,"STATE":streetlight.STATE,"LAT":streetlight.LAT,"LON":streetlight.LON,"DRY_BIN":streetlight.DRY_BIN,"WET_BIN":streetlight.WET_BIN,"DATE":str(streetlight.DATE),"TIME_STAMP":str(streetlight.TIME_STAMP)})
+            streetlights.append({"ID":streetlight.ID, "BV":streetlight.BV,"BI":streetlight.BI,"SV":streetlight.SV,"SI":streetlight.SI,"LV":streetlight.LV,"LI":streetlight.LI,"BA":streetlight.BA,"STATE":streetlight.STATE,"LAT":streetlight.LAT,"LON":streetlight.LON,"DRY_BIN":streetlight.DRY_BIN,"WET_BIN":streetlight.WET_BIN,"DATE":str(streetlight.DATE),"TIME_STAMP":str(streetlight.TIME_STAMP)})
         responses=json.dumps([{'Streetlights':streetlights,'latest_data':latest_data,'no_of_results_per_page':no_of_results_per_page,'page_no':page_no,'total_results':total_results,'no_of_pages':math.ceil(total_results/no_of_results_per_page)}])
     else:
         responses=json.dumps([{'Error':'Only Get Request Allowed'}])
