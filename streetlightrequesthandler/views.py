@@ -1,15 +1,33 @@
 import json
 from django.db.models import Q
 from django.http.response import HttpResponse
-from streetlightrequesthandler.models import StreetLight
+from streetlightrequesthandler.models import StreetLight ,StreetLightHistory
 import math
 
 # Create your views here.
 def store_data_from_streetlight(request):
     if request.method=='GET':
         payload=request.GET
-        streetlightrecord = StreetLight(ID=payload.get('ID'), BV=payload.get('BV'),BI=payload.get('BI'),SV=payload.get('SV'),SI=payload.get('SI'),LV=payload.get('LV'),LI=payload.get('LI'),BA=payload.get('BA'),STATE=payload.get('STATE'),LAT=payload.get('LAT'),LON=payload.get('LON'),DRY_BIN=payload.get('DRY_BIN'),WET_BIN=payload.get('WET_BIN'))
-        streetlightrecord.save()
+        try:
+            streetlightrecord = StreetLight.objects.get(ID=payload.get('ID'))
+            streetlightrecordhistory=StreetLightHistory(ID=payload.get('ID'), BV=streetlightrecord.BV,BI=streetlightrecord.BI,SV=streetlightrecord.SV,SI=streetlightrecord.SI,LV=streetlightrecord.LV,LI=streetlightrecord.LI,BA=streetlightrecord.BA,STATE=streetlightrecord.STATE,LAT=streetlightrecord.LAT,LON=streetlightrecord.LON,DRY_BIN=streetlightrecord.DRY_BIN,WET_BIN=streetlightrecord.WET_BIN,DATE=streetlightrecord.DATE,TIME_STAMP=streetlightrecord.TIME_STAMP)
+            streetlightrecordhistory.save()
+            streetlightrecord.BV = payload.get('BV')
+            streetlightrecord.BI = payload.get('BI')
+            streetlightrecord.SV = payload.get('SV')
+            streetlightrecord.SI = payload.get('SI')
+            streetlightrecord.LV = payload.get('LV')
+            streetlightrecord.LI = payload.get('LI')
+            streetlightrecord.BA = payload.get('BA')
+            streetlightrecord.STATE = payload.get('STATE')
+            streetlightrecord.LAT = payload.get('LAT')
+            streetlightrecord.LON = payload.get('LON')
+            streetlightrecord.DRY_BIN = payload.get('DRY_BIN')
+            streetlightrecord.WET_BIN = payload.get('WET_BIN')
+            streetlightrecord.save()
+        except:
+            streetlightrecord = StreetLight(ID=payload.get('ID'), BV=payload.get('BV'),BI=payload.get('BI'),SV=payload.get('SV'),SI=payload.get('SI'),LV=payload.get('LV'),LI=payload.get('LI'),BA=payload.get('BA'),STATE=payload.get('STATE'),LAT=payload.get('LAT'),LON=payload.get('LON'),DRY_BIN=payload.get('DRY_BIN'),WET_BIN=payload.get('WET_BIN'))
+            streetlightrecord.save()
         responses='SUCCESS'
     else:
         responses=json.dumps([{'Error':'Only Get Request Allowed'}])   
