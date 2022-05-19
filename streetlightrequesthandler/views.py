@@ -61,7 +61,7 @@ def get_all_historical_data(request):
         query=payload.get('query')
         light_id=payload.get('light_id')
         latest_data=StreetLight.objects.filter(ID=light_id)[0]
-        latest_data={"id":latest_data.id,"ID":latest_data.ID, "BV":latest_data.BV,"BI":latest_data.BI,"SV":latest_data.SV,"SI":latest_data.SI,"LV":latest_data.LV,"LI":latest_data.LI,"BA":latest_data.BA,"STATE":latest_data.STATE,"LAT":latest_data.LAT,"LON":latest_data.LON,"DRY_BIN":latest_data.DRY_BIN,"WET_BIN":latest_data.WET_BIN,"DATE":str(latest_data.DATE),"TIME_STAMP":str(latest_data.TIME_STAMP)}
+        latest_data={"ID":latest_data.ID, "BV":latest_data.BV,"BI":latest_data.BI,"SV":latest_data.SV,"SI":latest_data.SI,"LV":latest_data.LV,"LI":latest_data.LI,"BA":latest_data.BA,"STATE":latest_data.STATE,"LAT":latest_data.LAT,"LON":latest_data.LON,"DRY_BIN":latest_data.DRY_BIN,"WET_BIN":latest_data.WET_BIN,"DATE":str(latest_data.DATE),"TIME_STAMP":str(latest_data.TIME_STAMP)}
         results=StreetLightHistory.objects.filter(ID=light_id).filter(Q(STATE__icontains=query) | Q(LAT__icontains=query)| Q(LON__icontains=query) | Q(DRY_BIN__icontains=query) | Q(WET_BIN__icontains=query) )
         total_results=results.count()
         streetlights=[]
