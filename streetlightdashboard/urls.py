@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from streetlightrequesthandler.views import get_all_states_with_lon_lat, store_data_from_streetlight, get_all_data, get_no_of_records,get_all_states,get_all_historical_data
+from streetlightrequesthandler.views import get_all_data_without_pagination, get_all_states_with_lon_lat, store_data_from_streetlight, get_all_data, get_no_of_records,get_all_states,get_all_historical_data,get_all_historical_data_without_pagination
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,4 +26,6 @@ urlpatterns = [
     path('api/get_all_states',get_all_states,name='get_all_states'),
     path('api/get_all_states_with_lon_lat',get_all_states_with_lon_lat,name='get_all_states_with_lon_lat'),
     path('api/get_all_historical_data',get_all_historical_data,name='get_all_historical_data'),
+    path('api/get_all_data_without_pagination',get_all_data_without_pagination,name="get_all_data_without_pagination"),
+    path('api/get_all_historical_data_without_pagination',get_all_historical_data_without_pagination,name="get_all_historical_data_without_pagination"),
 ]

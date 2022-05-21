@@ -53,6 +53,40 @@ def get_all_data(request):
     
     return HttpResponse(responses,content_type='text/json')
 
+def get_all_data_without_pagination(request):
+    if request.method=='GET':
+        payload=request.GET
+        query=payload.get('query')
+        results=StreetLight.objects.filter(Q(ID__icontains=query) | Q(STATE__icontains=query) | Q(LAT__icontains=query)| Q(LON__icontains=query) | Q(DRY_BIN__icontains=query) | Q(WET_BIN__icontains=query) )
+        total_results=results.count()
+        streetlights=[]
+        for streetlight in results:
+            streetlights.append({"ID":streetlight.ID, "BV":streetlight.BV,"BI":streetlight.BI,"SV":streetlight.SV,"SI":streetlight.SI,"LV":streetlight.LV,"LI":streetlight.LI,"BA":streetlight.BA,"STATE":streetlight.STATE,"LAT":streetlight.LAT,"LON":streetlight.LON,"DRY_BIN":streetlight.DRY_BIN,"WET_BIN":streetlight.WET_BIN,"DATE":str(streetlight.DATE),"TIME_STAMP":str(streetlight.TIME_STAMP)})
+        responses=json.dumps([{'Streetlights':streetlights,'total_results':total_results}])
+    else:
+        responses=json.dumps([{'Error':'Only Get Request Allowed'}])
+
+    return HttpResponse(responses,content_type='text/json')
+
+def get_all_historical_data_without_pagination(request):
+    if request.method=='GET':
+        payload=request.GET
+        query=payload.get('query')
+        light_id=payload.get('light_id')
+        results=StreetLight.objects.filter(ID=light_id).filter(Q(ID__icontains=query) | Q(STATE__icontains=query) | Q(LAT__icontains=query)| Q(LON__icontains=query) | Q(DRY_BIN__icontains=query) | Q(WET_BIN__icontains=query) )
+        results_history=StreetLightHistory.objects.filter(ID=light_id).filter(Q(ID__icontains=query) | Q(STATE__icontains=query) | Q(LAT__icontains=query)| Q(LON__icontains=query) | Q(DRY_BIN__icontains=query) | Q(WET_BIN__icontains=query) )
+        total_results=results.count()+results_history.count()
+        streetlights=[]
+        for streetlight in results:
+            streetlights.append({"ID":streetlight.ID, "BV":streetlight.BV,"BI":streetlight.BI,"SV":streetlight.SV,"SI":streetlight.SI,"LV":streetlight.LV,"LI":streetlight.LI,"BA":streetlight.BA,"STATE":streetlight.STATE,"LAT":streetlight.LAT,"LON":streetlight.LON,"DRY_BIN":streetlight.DRY_BIN,"WET_BIN":streetlight.WET_BIN,"DATE":str(streetlight.DATE),"TIME_STAMP":str(streetlight.TIME_STAMP)})
+        for streetlight in results_history:
+            streetlights.append({"ID":streetlight.ID, "BV":streetlight.BV,"BI":streetlight.BI,"SV":streetlight.SV,"SI":streetlight.SI,"LV":streetlight.LV,"LI":streetlight.LI,"BA":streetlight.BA,"STATE":streetlight.STATE,"LAT":streetlight.LAT,"LON":streetlight.LON,"DRY_BIN":streetlight.DRY_BIN,"WET_BIN":streetlight.WET_BIN,"DATE":str(streetlight.DATE),"TIME_STAMP":str(streetlight.TIME_STAMP)})
+        responses=json.dumps([{'Streetlights':streetlights,'total_results':total_results}])
+    else:
+        responses=json.dumps([{'Error':'Only Get Request Allowed'}])
+
+    return HttpResponse(responses,content_type='text/json')
+
 def get_all_historical_data(request):
     if request.method=='GET':
         payload=request.GET
