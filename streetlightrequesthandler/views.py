@@ -41,7 +41,7 @@ def get_all_data(request):
         no_of_results_per_page=int(payload.get('no_of_results_per_page'))
         page_no=int(payload.get('page_no'))
         query=payload.get('query')
-        results=StreetLight.objects.filter(Q(ID__icontains=query) | Q(STATE__icontains=query) | Q(LAT__icontains=query)| Q(LON__icontains=query) | Q(DRY_BIN__icontains=query) | Q(WET_BIN__icontains=query) )
+        results=StreetLight.objects.filter(Q(ID__icontains=query) | Q(STATE__icontains=query) | Q(LAT__icontains=query)| Q(LON__icontains=query) | Q(DRY_BIN__icontains=query) | Q(WET_BIN__icontains=query) ).order_by("-DATE","-TIME_STAMP")
         total_results=results.count()
         streetlights=[]
         for streetlight in results[(page_no-1)*no_of_results_per_page:((page_no-1)*no_of_results_per_page)+no_of_results_per_page]:
@@ -57,7 +57,7 @@ def get_all_data_without_pagination(request):
     if request.method=='GET':
         payload=request.GET
         query=payload.get('query')
-        results=StreetLight.objects.filter(Q(ID__icontains=query) | Q(STATE__icontains=query) | Q(LAT__icontains=query)| Q(LON__icontains=query) | Q(DRY_BIN__icontains=query) | Q(WET_BIN__icontains=query) )
+        results=StreetLight.objects.filter(Q(ID__icontains=query) | Q(STATE__icontains=query) | Q(LAT__icontains=query)| Q(LON__icontains=query) | Q(DRY_BIN__icontains=query) | Q(WET_BIN__icontains=query) ).order_by("-DATE","-TIME_STAMP")
         total_results=results.count()
         streetlights=[]
         for streetlight in results:
@@ -73,8 +73,8 @@ def get_all_historical_data_without_pagination(request):
         payload=request.GET
         query=payload.get('query')
         light_id=payload.get('light_id')
-        results=StreetLight.objects.filter(ID=light_id).filter(Q(ID__icontains=query) | Q(STATE__icontains=query) | Q(LAT__icontains=query)| Q(LON__icontains=query) | Q(DRY_BIN__icontains=query) | Q(WET_BIN__icontains=query) )
-        results_history=StreetLightHistory.objects.filter(ID=light_id).filter(Q(ID__icontains=query) | Q(STATE__icontains=query) | Q(LAT__icontains=query)| Q(LON__icontains=query) | Q(DRY_BIN__icontains=query) | Q(WET_BIN__icontains=query) )
+        results=StreetLight.objects.filter(ID=light_id).filter(Q(ID__icontains=query) | Q(STATE__icontains=query) | Q(LAT__icontains=query)| Q(LON__icontains=query) | Q(DRY_BIN__icontains=query) | Q(WET_BIN__icontains=query) ).order_by("-DATE","-TIME_STAMP")
+        results_history=StreetLightHistory.objects.filter(ID=light_id).filter(Q(ID__icontains=query) | Q(STATE__icontains=query) | Q(LAT__icontains=query)| Q(LON__icontains=query) | Q(DRY_BIN__icontains=query) | Q(WET_BIN__icontains=query) ).order_by("-DATE","-TIME_STAMP")
         total_results=results.count()+results_history.count()
         streetlights=[]
         for streetlight in results:
@@ -96,7 +96,7 @@ def get_all_historical_data(request):
         light_id=payload.get('light_id')
         latest_data=StreetLight.objects.filter(ID=light_id)[0]
         latest_data={"ID":latest_data.ID, "BV":latest_data.BV,"BI":latest_data.BI,"SV":latest_data.SV,"SI":latest_data.SI,"LV":latest_data.LV,"LI":latest_data.LI,"BA":latest_data.BA,"STATE":latest_data.STATE,"LAT":latest_data.LAT,"LON":latest_data.LON,"DRY_BIN":latest_data.DRY_BIN,"WET_BIN":latest_data.WET_BIN,"DATE":str(latest_data.DATE),"TIME_STAMP":str(latest_data.TIME_STAMP)}
-        results=StreetLightHistory.objects.filter(ID=light_id).filter(Q(STATE__icontains=query) | Q(LAT__icontains=query)| Q(LON__icontains=query) | Q(DRY_BIN__icontains=query) | Q(WET_BIN__icontains=query) )
+        results=StreetLightHistory.objects.filter(ID=light_id).filter(Q(STATE__icontains=query) | Q(LAT__icontains=query)| Q(LON__icontains=query) | Q(DRY_BIN__icontains=query) | Q(WET_BIN__icontains=query) ).order_by("-DATE","-TIME_STAMP")
         total_results=results.count()
         streetlights=[]
         for streetlight in results[(page_no-1)*no_of_results_per_page:((page_no-1)*no_of_results_per_page)+no_of_results_per_page]:
