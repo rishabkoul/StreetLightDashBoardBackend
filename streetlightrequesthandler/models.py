@@ -15,6 +15,9 @@ class StreetLight(models.Model):
     LON=models.CharField(max_length=255,null=False)
     DRY_BIN=models.CharField(max_length=255,null=False)
     WET_BIN=models.CharField(max_length=255,null=False)
+    BW=models.FloatField(null=False)
+    SW=models.FloatField(null=False)
+    LW=models.FloatField(null=False)
     DATE = models.DateField(auto_now=True,null=False)
     TIME_STAMP = models.TimeField(auto_now=True,null=False)
 
@@ -32,5 +35,8 @@ class StreetLightHistory(models.Model):
     LON=models.CharField(max_length=255,null=False)
     DRY_BIN=models.CharField(max_length=255,null=False)
     WET_BIN=models.CharField(max_length=255,null=False)
+    BW=models.FloatField(null=False)
+    SW=models.FloatField(null=False)
+    LW=models.FloatField(null=False)
     DATE = models.DateField(null=False)
     TIME_STAMP = models.TimeField(null=False)
