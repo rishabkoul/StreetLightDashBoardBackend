@@ -3,6 +3,7 @@ from django.db.models import Q
 from django.http.response import HttpResponse
 from streetlightrequesthandler.models import StreetLight ,StreetLightHistory
 import math
+from shapely.geometry import MultiPoint
 
 # Create your views here.
 def store_data_from_streetlight(request):
@@ -132,8 +133,13 @@ def get_all_states(request):
 
 def get_all_states_with_lon_lat(request):
     if request.method=='GET':
+        lon_lats=[]
         states_with_lon_lat=list(StreetLight.objects.all().values_list('LON', 'LAT','STATE'))
-        responses=json.dumps([{'states_with_lon_lat':states_with_lon_lat}])
+        for lon_lat in list(StreetLight.objects.all().values_list('LON', 'LAT')):
+            lon_lats.append((float(lon_lat[0].replace("'",'')),float(lon_lat[1].replace("'",''))))
+
+        points = MultiPoint(lon_lats)
+        responses=json.dumps([{'states_with_lon_lat':states_with_lon_lat,'centroid':list(points.centroid.coords)}])
     else:
         responses=json.dumps([{'Error':'Only Get Request Allowed'}])   
 
