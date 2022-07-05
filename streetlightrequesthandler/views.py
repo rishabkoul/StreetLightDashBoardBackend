@@ -4,6 +4,7 @@ from django.http.response import HttpResponse
 from streetlightrequesthandler.models import StreetLight ,StreetLightHistory
 import math
 from shapely.geometry import MultiPoint
+from django.core.serializers.json import DjangoJSONEncoder
 
 # Create your views here.
 def store_data_from_streetlight(request):
@@ -63,10 +64,10 @@ def get_all_data_without_pagination(request):
         query=payload.get('query')
         results=StreetLight.objects.filter(Q(ID__icontains=query) | Q(STATE__icontains=query) | Q(LAT__icontains=query)| Q(LON__icontains=query) | Q(CHARGING_STATUS__icontains=query) | Q(DAY_NIGHT__icontains=query) ).order_by("-DATE","-TIME_STAMP")
         total_results=results.count()
-        streetlights=[]
-        for streetlight in results:
-            streetlights.append({"ID":streetlight.ID, "BV":streetlight.BV,"BI":streetlight.BI,"SV":streetlight.SV,"SI":streetlight.SI,"LV":streetlight.LV,"LI":streetlight.LI,"BA":streetlight.BA,"STATE":streetlight.STATE,"LAT":streetlight.LAT,"LON":streetlight.LON,"CHARGING_STATUS":streetlight.CHARGING_STATUS,"DAY_NIGHT":streetlight.DAY_NIGHT,"BW":streetlight.BW,"SW":streetlight.SW,"LW":streetlight.LW,"DATE":str(streetlight.DATE),"TIME_STAMP":str(streetlight.TIME_STAMP)})
-        responses=json.dumps([{'Streetlights':streetlights,'total_results':total_results}])
+        # streetlights=[]
+        # for streetlight in results:
+        #     streetlights.append({"ID":streetlight.ID, "BV":streetlight.BV,"BI":streetlight.BI,"SV":streetlight.SV,"SI":streetlight.SI,"LV":streetlight.LV,"LI":streetlight.LI,"BA":streetlight.BA,"STATE":streetlight.STATE,"LAT":streetlight.LAT,"LON":streetlight.LON,"CHARGING_STATUS":streetlight.CHARGING_STATUS,"DAY_NIGHT":streetlight.DAY_NIGHT,"BW":streetlight.BW,"SW":streetlight.SW,"LW":streetlight.LW,"DATE":str(streetlight.DATE),"TIME_STAMP":str(streetlight.TIME_STAMP)})
+        responses=json.dumps([{'Streetlights':list(results.values()),'total_results':total_results}],cls=DjangoJSONEncoder)
     else:
         responses=json.dumps([{'Error':'Only Get Request Allowed'}])
 
@@ -80,12 +81,12 @@ def get_all_historical_data_without_pagination(request):
         results=StreetLight.objects.filter(ID=light_id).filter(Q(ID__icontains=query) | Q(STATE__icontains=query) | Q(LAT__icontains=query)| Q(LON__icontains=query) | Q(CHARGING_STATUS__icontains=query) | Q(DAY_NIGHT__icontains=query) ).order_by("-DATE","-TIME_STAMP")
         results_history=StreetLightHistory.objects.filter(ID=light_id).filter(Q(ID__icontains=query) | Q(STATE__icontains=query) | Q(LAT__icontains=query)| Q(LON__icontains=query) | Q(CHARGING_STATUS__icontains=query) | Q(DAY_NIGHT__icontains=query) ).order_by("-DATE","-TIME_STAMP")
         total_results=results.count()+results_history.count()
-        streetlights=[]
-        for streetlight in results:
-            streetlights.append({"ID":streetlight.ID, "BV":streetlight.BV,"BI":streetlight.BI,"SV":streetlight.SV,"SI":streetlight.SI,"LV":streetlight.LV,"LI":streetlight.LI,"BA":streetlight.BA,"STATE":streetlight.STATE,"LAT":streetlight.LAT,"LON":streetlight.LON,"CHARGING_STATUS":streetlight.CHARGING_STATUS,"DAY_NIGHT":streetlight.DAY_NIGHT,"BW":streetlight.BW,"SW":streetlight.SW,"LW":streetlight.LW,"DATE":str(streetlight.DATE),"TIME_STAMP":str(streetlight.TIME_STAMP)})
-        for streetlight in results_history:
-            streetlights.append({"ID":streetlight.ID, "BV":streetlight.BV,"BI":streetlight.BI,"SV":streetlight.SV,"SI":streetlight.SI,"LV":streetlight.LV,"LI":streetlight.LI,"BA":streetlight.BA,"STATE":streetlight.STATE,"LAT":streetlight.LAT,"LON":streetlight.LON,"CHARGING_STATUS":streetlight.CHARGING_STATUS,"DAY_NIGHT":streetlight.DAY_NIGHT,"BW":streetlight.BW,"SW":streetlight.SW,"LW":streetlight.LW,"DATE":str(streetlight.DATE),"TIME_STAMP":str(streetlight.TIME_STAMP)})
-        responses=json.dumps([{'Streetlights':streetlights,'total_results':total_results}])
+        # streetlights=[]
+        # for streetlight in results:
+        #     streetlights.append({"ID":streetlight.ID, "BV":streetlight.BV,"BI":streetlight.BI,"SV":streetlight.SV,"SI":streetlight.SI,"LV":streetlight.LV,"LI":streetlight.LI,"BA":streetlight.BA,"STATE":streetlight.STATE,"LAT":streetlight.LAT,"LON":streetlight.LON,"CHARGING_STATUS":streetlight.CHARGING_STATUS,"DAY_NIGHT":streetlight.DAY_NIGHT,"BW":streetlight.BW,"SW":streetlight.SW,"LW":streetlight.LW,"DATE":str(streetlight.DATE),"TIME_STAMP":str(streetlight.TIME_STAMP)})
+        # for streetlight in results_history:
+        #     streetlights.append({"ID":streetlight.ID, "BV":streetlight.BV,"BI":streetlight.BI,"SV":streetlight.SV,"SI":streetlight.SI,"LV":streetlight.LV,"LI":streetlight.LI,"BA":streetlight.BA,"STATE":streetlight.STATE,"LAT":streetlight.LAT,"LON":streetlight.LON,"CHARGING_STATUS":streetlight.CHARGING_STATUS,"DAY_NIGHT":streetlight.DAY_NIGHT,"BW":streetlight.BW,"SW":streetlight.SW,"LW":streetlight.LW,"DATE":str(streetlight.DATE),"TIME_STAMP":str(streetlight.TIME_STAMP)})
+        responses=json.dumps([{'Streetlights':list(results.values())+list(results_history.values()),'total_results':total_results}],cls=DjangoJSONEncoder)
     else:
         responses=json.dumps([{'Error':'Only Get Request Allowed'}])
 
